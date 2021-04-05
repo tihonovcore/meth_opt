@@ -21,8 +21,8 @@ table_from_lecture, basic_from_lecture = create_table(
 
 table_from_lab_4_1, _ = create_table(
     [
-     [3,  1, -1,  1, "<=", 4],
-     [5,  1,  1, -1, "<=", 4],
+     [3,  1, -1,  1, "==", 4],
+     [5,  1,  1, -1, "==", 4],
     ],
     function=[6, 1, 4, -5]
 )

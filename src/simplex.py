@@ -4,9 +4,7 @@ INF = 10000
 
 
 def simplex(table, basic, render_info=False):
-    stat = set()
-    # while True:
-    for _ in range(10):
+    while True:
         b = table[:-1, 0]
 
         new_basic_element = np.argmax(table[-1][1:]) + 1
@@ -38,4 +36,4 @@ def simplex(table, basic, render_info=False):
 
         basic[old_basic_element] = new_basic_element
 
-    return table[-1][0]
+    return -table[-1][0]

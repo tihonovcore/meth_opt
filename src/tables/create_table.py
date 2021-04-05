@@ -47,6 +47,9 @@ def to_table_format(constraint):
 def evaluate_function(old_vars_count, new_vars_count, constraints, function):
     x = [0 for _ in range(old_vars_count + new_vars_count)]
 
+    if new_vars_count == 0:
+        return np.array(function) @ np.array(x)
+
     for constraint in constraints:
         unit_vector = constraint[old_vars_count:-2]
         index_at_eye = np.argmax(unit_vector)
