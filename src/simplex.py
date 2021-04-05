@@ -2,7 +2,8 @@ import numpy as np
 
 INF = 10000
 
-def simplex(table, basic):
+
+def simplex(table, basic, render_info=False):
     stat = set()
     # while True:
     for _ in range(10):
@@ -18,13 +19,12 @@ def simplex(table, basic):
                 borders[i] = b[i] / borders[i]
         # todo: choose old != new
         old_basic_element = np.argmin(borders)
-        # old_basic_element = np.argmin(list(map(lambda t: t if t > 0 else INF, b / list(table[:-1, new_basic_element]))))
 
-        print(basic)
-        print('%d --> %d' % (basic[old_basic_element], new_basic_element))
-        # print('F: %f' % table[-1][0])
-        print(table)
-        print()
+        if render_info:
+            print(basic)
+            print('%d --> %d' % (basic[old_basic_element], new_basic_element))
+            print(table)
+            print()
 
         if table[-1][new_basic_element] <= 0:
             break
@@ -37,3 +37,5 @@ def simplex(table, basic):
             table[line] = table[line] - table[line][new_basic_element] * table[old_basic_element]
 
         basic[old_basic_element] = new_basic_element
+
+    return table[-1][0]
