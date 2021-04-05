@@ -1,6 +1,21 @@
 import numpy as np
 
 
+class TableDescription:
+    # constrains is list like: [a_i_1, .., a_i_m, ###, b_i], where ### is "==" or "<=" or ">="
+    # function   is list like: [c_1, .., c_m]
+    def __init__(self, constraints, function, opt, description=""):
+        self.constraints = constraints
+        self.function = function
+        self.opt = opt
+        self.description = description
+
+        self.table = None
+        self.basic = None
+
+        self.original_vars_count = len(function)
+
+
 def change_ge_to_le(constraint):
     if constraint[-2] != ">=":
         return constraint
@@ -60,9 +75,10 @@ def evaluate_function(old_vars_count, new_vars_count, constraints, function):
     return np.array(function) @ np.array(x)
 
 
-# constrains is list like: [a_i_1, .., a_i_m, ###, b_i], where ### is "==" or "<=" or ">="
-# function   is list like: [c_1, .., c_m]
-def create_table(constraints, function):
+def create_simplex_table(table_description):
+    constraints = table_description.constraints
+    function = table_description.function
+
     constraints = list(map(change_ge_to_le, constraints))
 
     old_vars_count = len(function)
@@ -79,4 +95,5 @@ def create_table(constraints, function):
     table = np.array([*constraints, function], dtype='float32')
     basic = np.array([i for i in range(old_vars_count + 1, old_vars_count + 1 + new_vars_count)])
 
-    return table, basic
+    table_description.table = table
+    table_description.basic = basic

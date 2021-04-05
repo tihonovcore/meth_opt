@@ -3,7 +3,11 @@ import numpy as np
 INF = 10000
 
 
-def simplex(table, basic, opt="min", render_info=False):
+def simplex(table_description, render_info=False):
+    table = table_description.table
+    basic = table_description.basic
+    opt = table_description.opt
+
     if opt == "min":
         table[-1] = -table[-1]
         table[-1][0] = -table[-1][0]
