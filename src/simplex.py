@@ -3,7 +3,11 @@ import numpy as np
 INF = 10000
 
 
-def simplex(table, basic, render_info=False):
+def simplex(table, basic, opt="min", render_info=False):
+    if opt == "min":
+        table[-1] = -table[-1]
+        table[-1][0] = -table[-1][0]
+
     while True:
         b = table[:-1, 0]
 
@@ -36,4 +40,8 @@ def simplex(table, basic, render_info=False):
 
         basic[old_basic_element] = new_basic_element
 
-    return -table[-1][0]
+    # todo: return `x` too
+    if opt == "max":
+        return -table[-1][0]
+    else:
+        return table[-1][0]

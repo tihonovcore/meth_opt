@@ -70,6 +70,8 @@ def create_table(constraints, function):
     add_new_variables(constraints, new_vars_count)
     function.extend([0 for _ in range(new_vars_count)])
 
+    # todo: если новых переменных не хватает для базиса нужно взять старые
+
     f_at_x0 = evaluate_function(old_vars_count, new_vars_count, constraints, function)
     function.insert(0, f_at_x0)
 
