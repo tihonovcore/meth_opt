@@ -23,7 +23,7 @@ def simplex(table_description, render_info=False):
                 borders[i] = INF
             else:
                 borders[i] = b[i] / borders[i]
-        # todo: choose old != new
+        # todo: choose old != new (??)
         old_basic_element = np.argmin(borders)
 
         if render_info:
@@ -44,8 +44,11 @@ def simplex(table_description, render_info=False):
 
         basic[old_basic_element] = new_basic_element
 
-    # todo: return `x` too
-    if opt == "max":
-        return -table[-1][0]
-    else:
-        return table[-1][0]
+    f_opt = table[-1][0] if opt == "min" else -table[-1][0]
+    x_opt = [0 for _ in range(table_description.original_vars_count)]
+
+    for b_i, variable_index in zip(b, basic):
+        if variable_index - 1 < table_description.original_vars_count:
+            x_opt[variable_index - 1] = b_i
+
+    return f_opt, x_opt
