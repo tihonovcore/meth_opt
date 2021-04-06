@@ -75,42 +75,11 @@ def evaluate_function(old_vars_count, new_vars_count, constraints, function):
     return np.array(function) @ np.array(x)
 
 
-def rank_by_occurs(constraints, occurs):
-    matrix = constraints[:, occurs]
-    return np.linalg.matrix_rank(matrix)
-
-
-def gauss(constraints, occurs):
-    n, _ = constraints.shape
-
-    for i, o in enumerate(occurs):
-        if constraints[i][o] == 0:
-            pass  # todo
-
-        constraints[i] /= constraints[i][o]
-
-        for j in range(i + 1, n):
-            constraints[j] -= constraints[i] * constraints[j][o]
-
-    for i, o in reversed(list(enumerate(occurs))):
-        for j in range(i):
-            constraints[j] -= constraints[i] * constraints[j][o]
-
-
 def choose_basic(constraints, old_vars_count, new_vars_count):
     rank, _ = constraints.shape
 
     if rank == new_vars_count:
         return [i for i in range(old_vars_count + 1, old_vars_count + 1 + new_vars_count)]
-
-    for i in range(2 ** (old_vars_count + new_vars_count)):
-        occurs = [j + 1 for j, x in enumerate(list(reversed(bin(i)[2:]))) if x == '1']
-        if len(occurs) != rank:
-            continue
-
-        if rank_by_occurs(constraints, occurs) == rank:
-            gauss(constraints, occurs)
-            return occurs
 
 
 def create_simplex_table(table_description):
