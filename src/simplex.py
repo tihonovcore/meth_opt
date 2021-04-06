@@ -1,6 +1,7 @@
 import numpy as np
 
 INF = 10000
+EPS = 1e-5
 
 
 def simplex(table_description, render_info=False):
@@ -32,7 +33,7 @@ def simplex(table_description, render_info=False):
             print(table)
             print()
 
-        if table[-1][new_basic_element] <= 0:
+        if table[-1][new_basic_element] <= EPS:
             break
 
         table[old_basic_element] = table[old_basic_element] / table[old_basic_element][new_basic_element]

@@ -70,6 +70,8 @@ def choose_basic(constraints, old_vars_count, new_vars_count):
     rank, _ = constraints.shape
 
     if rank == new_vars_count:
+        # todo: if f((b, 0)) is not >= 0 this don't work!!!
+        #  needs another basis
         return [i for i in range(old_vars_count + 1, old_vars_count + 1 + new_vars_count)]
 
     raise Exception('rank(%d) != new_vars_count(%d)' % (rank, new_vars_count))
