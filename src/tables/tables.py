@@ -22,16 +22,15 @@ all_tables_descriptions = [
         opt="max",
         description="from lecture"
     ),
-    # Table(
-    #     [
-    #         [3, 1, -1, 1, "==", 4],
-    #         [5, 1, 1, -1, "==", 4],
-    #     ],
-    #     function=[-6, -1, -4, 5],
-    #     opt="min",
-    #     description="from lab 4.1"
-    # ),
-    # start_basic: [1, 4]
+    TableDescription(
+        [
+            [3, 1, -1, 1, "==", 4],
+            [5, 1, 1, -1, "==", 4],
+        ],
+        function=[-6, -1, -4, 5],
+        opt="min",
+        description="from lab 4.1"
+    ),
     TableDescription(
         constraints=[
             [1, 3, 3,  1, "<=", 3],

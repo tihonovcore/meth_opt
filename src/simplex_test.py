@@ -32,16 +32,26 @@ def test_from_lecture():
     assert x_opt == [3.0, 2.0]
 
 
+def test_from_lab_41():
+    table_description = find_table_by_description("from lab 4.1")
+    create_simplex_table(table_description)
+    f_opt, x_opt = simplex.simplex(table_description)
+
+    assert f_opt == -16.0
+    assert x_opt == [0, 0, 4, 0]
+
+
 def test_from_lab_46():
     table_description = find_table_by_description("from lab 4.6")
     create_simplex_table(table_description)
     f_opt, x_opt = simplex.simplex(table_description)
 
     assert f_opt == -3.0
-    assert x_opt == [np.float32(i) for i in [8.0 / 3, 0, 0, 1.0 / 3]]
+    assert x_opt == [8.0 / 3, 0, 0, 1.0 / 3]
 
 
 if __name__ == '__main__':
     test_from_book()
     test_from_lecture()
+    test_from_lab_41()
     test_from_lab_46()

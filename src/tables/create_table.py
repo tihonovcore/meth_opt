@@ -38,21 +38,12 @@ def add_new_variables(constraints, new_vars_count):
     basic_vector_index = 0
 
     for constraint in constraints:
-        if constraint[-2] == "<=":
-            new_vars_coefficients = [0 for _ in range(new_vars_count)]
-            new_vars_coefficients[basic_vector_index] = 1
-            basic_vector_index += 1
+        new_vars_coefficients = [0 for _ in range(new_vars_count)]
+        new_vars_coefficients[basic_vector_index] = 1
+        basic_vector_index += 1
 
-            for coef in new_vars_coefficients:
-                constraint.insert(-2, coef)
-
-            constraint[-2] = "=="
-        elif constraint[-2] == "==":
-            for j in range(new_vars_count):
-                constraint.insert(-2, 0)
-        else:
-            msg = "here expected '<=' or '==', but not '%s'" % constraint[-2]
-            raise Exception(msg)
+        for coef in new_vars_coefficients:
+            constraint.insert(-2, coef)
 
 
 def to_table_format(constraint):
@@ -81,6 +72,8 @@ def choose_basic(constraints, old_vars_count, new_vars_count):
     if rank == new_vars_count:
         return [i for i in range(old_vars_count + 1, old_vars_count + 1 + new_vars_count)]
 
+    raise Exception('rank(%d) != new_vars_count(%d)' % (rank, new_vars_count))
+
 
 def create_simplex_table(table_description):
     constraints = table_description.constraints
@@ -89,11 +82,9 @@ def create_simplex_table(table_description):
     constraints = list(map(change_ge_to_le, constraints))
 
     old_vars_count = len(function)
-    new_vars_count = less_or_equals_count(constraints)
+    new_vars_count = len(constraints)
     add_new_variables(constraints, new_vars_count)
     function.extend([0 for _ in range(new_vars_count)])
-
-    # todo: если новых переменных не хватает для базиса нужно взять старые
 
     f_at_x0 = evaluate_function(old_vars_count, new_vars_count, constraints, function)
     function.insert(0, f_at_x0)
