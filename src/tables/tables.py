@@ -24,6 +24,15 @@ all_tables_descriptions = [
     ),
     TableDescription(
         [
+            [ 2, -1, 1, 0, "==", 1],
+            [-1,  2, 0, 1, "==", 1],
+        ],
+        function=[1, 1, -2, -3],
+        opt="min",
+        description="from lab 3.8"
+    ),
+    TableDescription(
+        [
             [3, 1, -1, 1, "==", 4],
             [5, 1, 1, -1, "==", 4],
         ],
