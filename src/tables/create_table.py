@@ -50,31 +50,53 @@ def to_table_format(constraint):
     return [constraint[-1], *constraint[:-2]]
 
 
-def evaluate_function(old_vars_count, new_vars_count, constraints, function):
-    x = [0 for _ in range(old_vars_count + new_vars_count)]
+def rank_by_occurs(constraints, occurs):
+    matrix = constraints[:, occurs]
+    return np.linalg.matrix_rank(matrix)
 
-    if new_vars_count == 0:
-        return np.array(function) @ np.array(x)
 
-    for constraint in constraints:
-        unit_vector = constraint[old_vars_count:-2]
-        index_at_eye = np.argmax(unit_vector)
+def gauss(constraints, occurs):
+    n, _ = constraints.shape
 
-        if unit_vector[index_at_eye] == 1:
-            x[old_vars_count + index_at_eye] = constraint[-1]
+    for i, o in enumerate(occurs):
+        if constraints[i][o] == 0:
+            for j in range(i + 1, n):
+                if constraints[j][o] != 0:
+                    constraints[i] += constraints[j]
+                    break
 
-    return np.array(function) @ np.array(x)
+        constraints[i] /= constraints[i][o]
+
+        for j in range(i + 1, n):
+            constraints[j] -= constraints[i] * constraints[j][o]
+
+    for i, o in reversed(list(enumerate(occurs))):
+        for j in range(i):
+            constraints[j] -= constraints[i] * constraints[j][o]
 
 
 def choose_basic(constraints, old_vars_count, new_vars_count):
     rank, _ = constraints.shape
+    if rank != new_vars_count:
+        raise Exception('rank(%d) != new_vars_count(%d)' % (rank, new_vars_count))
 
-    if rank == new_vars_count:
-        # todo: if f((b, 0)) is not >= 0 this don't work!!!
-        #  needs another basis
+    b = constraints[:, 0]
+    if all(b >= 0):
         return [i for i in range(old_vars_count + 1, old_vars_count + 1 + new_vars_count)]
 
-    raise Exception('rank(%d) != new_vars_count(%d)' % (rank, new_vars_count))
+    for i in range(2 ** (old_vars_count + new_vars_count)):
+        occurs = [j + 1 for j, x in enumerate(list(reversed(bin(i)[2:]))) if x == '1']
+        if len(occurs) != rank:
+            continue
+
+        if rank_by_occurs(constraints, occurs) == rank:
+            gauss(constraints, occurs)
+
+            b = constraints[:, 0]
+            if all(b >= 0):
+                return occurs
+
+    raise Exception("there is no basis")
 
 
 def create_simplex_table(table_description):
@@ -88,11 +110,10 @@ def create_simplex_table(table_description):
     add_new_variables(constraints, new_vars_count)
     function.extend([0 for _ in range(new_vars_count)])
 
-    f_at_x0 = evaluate_function(old_vars_count, new_vars_count, constraints, function)
-    function.insert(0, f_at_x0)
-
     constraints = np.array(list(map(to_table_format, constraints)), dtype='float32')
     basic = choose_basic(constraints, old_vars_count, new_vars_count)
+
+    function.insert(0, 0)
     table = np.concatenate((constraints, [function]))
 
     table_description.table = table

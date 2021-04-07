@@ -16,16 +16,21 @@ def simplex(table_description, render_info=False):
     while True:
         b = table[:-1, 0]
 
-        new_basic_element = np.argmax(table[-1][1:]) + 1
+        new_basic_element_index = list(enumerate(table[-1][1:]))
+        new_basic_element_index.sort(key=lambda t: t[1], reverse=True)
+        new_basic_element_index = list(map(lambda t: t[0] + 1, new_basic_element_index))
 
-        borders = list(table[:-1, new_basic_element])
-        for i in range(len(borders)):
-            if borders[i] <= 0:
-                borders[i] = INF
-            else:
-                borders[i] = b[i] / borders[i]
-        # todo: choose old != new (??)
-        old_basic_element = np.argmin(borders)
+        for new_basic_element in new_basic_element_index:
+            borders = list(table[:-1, new_basic_element])
+            for i in range(len(borders)):
+                if borders[i] <= 0:
+                    borders[i] = INF
+                else:
+                    borders[i] = b[i] / borders[i]
+            old_basic_element = np.argmin(borders)
+
+            if borders[old_basic_element] != INF:
+                break
 
         if render_info:
             print(basic)
@@ -34,6 +39,10 @@ def simplex(table_description, render_info=False):
             print()
 
         if table[-1][new_basic_element] <= EPS:
+            break
+
+        if borders[old_basic_element] == INF:
+            print("Infinity solutions")
             break
 
         table[old_basic_element] = table[old_basic_element] / table[old_basic_element][new_basic_element]
