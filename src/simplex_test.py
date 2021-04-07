@@ -24,94 +24,102 @@ def find_table_by_description(description):
     return None
 
 
-def test_from_book():
-    table_description = find_table_by_description("from book")
+def common_simplex_test(description):
+    print(description, end='')
+
+    table_description = find_table_by_description(description)
     create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    return simplex.simplex(table_description)
+
+
+def test_from_book():
+    f_opt, x_opt = common_simplex_test("from book")
 
     assert eq(f_opt, 140.0)
     assert eq(x_opt, [40.0, 20.0])
 
+    print('\tOK')
+
 
 def test_from_lecture():
-    table_description = find_table_by_description("from lecture")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lecture")
 
     assert eq(f_opt, 7.0)
     assert eq(x_opt, [3.0, 2.0])
 
+    print('\tOK')
+
 
 def test_from_lab_38():
-    table_description = find_table_by_description("from lab 3.8")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 3.8")
 
     assert eq(f_opt, -5.0)
     assert eq(x_opt, [0, 0, 1, 1])
 
+    print('\tOK')
+
 
 def test_from_lab_41():
-    table_description = find_table_by_description("from lab 4.1")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.1")
 
     assert eq(f_opt, -16.0)
     assert eq(x_opt, [0, 0, 4, 0])
 
+    print('\tOK')
+
 
 def test_from_lab_42():
-    table_description = find_table_by_description("from lab 4.2")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.2")
 
     assert eq(f_opt, -6.0)
     assert eq(x_opt, [2, 2, 0, 0])
 
+    print('\tOK')
+
 
 def test_from_lab_43():
-    table_description = find_table_by_description("from lab 4.3")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.3")
 
     assert eq(f_opt, -11.0)
     assert eq(x_opt, [0, 5, 1, 0, 0])
 
+    print('\tOK')
+
 
 def test_from_lab_44():
-    table_description = find_table_by_description("from lab 4.4")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.4")
 
     assert eq(f_opt, -20.0)
     assert eq(x_opt, [0, 4, 0, 0, 16])
 
+    print('\tOK')
+
 
 def test_from_lab_45():
-    table_description = find_table_by_description("from lab 4.5")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.5")
 
     assert eq(f_opt, -4.0)
     assert eq(x_opt, [1, 0, 1, 0])
 
+    print('\tOK')
+
 
 def test_from_lab_46():
-    table_description = find_table_by_description("from lab 4.6")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.6")
 
     assert eq(f_opt, -3.0)
     assert eq(x_opt, [8.0 / 3, 0, 0, 1.0 / 3])
 
+    print('\tOK')
+
 
 def test_from_lab_47():
-    table_description = find_table_by_description("from lab 4.7")
-    create_simplex_table(table_description)
-    f_opt, x_opt = simplex.simplex(table_description)
+    f_opt, x_opt = common_simplex_test("from lab 4.7")
 
     assert eq(f_opt, -10.0)
     assert eq(x_opt, [0, 6, 0, 4, 0])
+
+    print('\tOK')
 
 
 if __name__ == '__main__':

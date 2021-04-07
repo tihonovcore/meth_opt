@@ -11,7 +11,7 @@ class TableDescription:
         self.description = description
 
         self.table = None
-        self.basic = None
+        self.basis = None
 
         self.original_vars_count = len(function)
 
@@ -35,12 +35,12 @@ def less_or_equals_count(constraints):
 
 
 def add_new_variables(constraints, new_vars_count):
-    basic_vector_index = 0
+    basis_vector_index = 0
 
     for constraint in constraints:
         new_vars_coefficients = [0 for _ in range(new_vars_count)]
-        new_vars_coefficients[basic_vector_index] = 1
-        basic_vector_index += 1
+        new_vars_coefficients[basis_vector_index] = 1
+        basis_vector_index += 1
 
         for coef in new_vars_coefficients:
             constraint.insert(-2, coef)
@@ -75,7 +75,7 @@ def gauss(constraints, occurs):
             constraints[j] -= constraints[i] * constraints[j][o]
 
 
-def choose_basic(constraints, old_vars_count, new_vars_count):
+def choose_basis(constraints, old_vars_count, new_vars_count):
     rank, _ = constraints.shape
     if rank != new_vars_count:
         raise Exception('rank(%d) != new_vars_count(%d)' % (rank, new_vars_count))
@@ -111,10 +111,10 @@ def create_simplex_table(table_description):
     function.extend([0 for _ in range(new_vars_count)])
 
     constraints = np.array(list(map(to_table_format, constraints)), dtype='float32')
-    basic = choose_basic(constraints, old_vars_count, new_vars_count)
+    basis = choose_basis(constraints, old_vars_count, new_vars_count)
 
     function.insert(0, 0)
     table = np.concatenate((constraints, [function]))
 
     table_description.table = table
-    table_description.basic = basic
+    table_description.basis = basis
